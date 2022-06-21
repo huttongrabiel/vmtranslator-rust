@@ -6,10 +6,12 @@ pub enum CommandType {
     Subtract,
     Negate,
     Equals,
-    GreaterThan, LessThan,
+    GreaterThan,
+    LessThan,
     And,
     Or,
     Not,
+    Other,
 }
 
 #[derive(Debug, PartialEq)]
