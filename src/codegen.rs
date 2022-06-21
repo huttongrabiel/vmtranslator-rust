@@ -1,4 +1,4 @@
-use crate::{Config, parser::{ParsedLine, CommandType}};
+use crate::{Config, parser::{ParsedLine, CommandType, MemorySegment}};
 
 pub fn codegen(config: &Config,
                parsed_line: &ParsedLine
@@ -62,7 +62,6 @@ fn generate_hack_asm(config: &Config,
             let lt_assembly = arithmetic_asm_gen(&CommandType::LessThan);
             generated_hack_asm
                 .push_str(&lt_assembly)
-
         },
         CommandType::And => {
             let and_assembly = arithmetic_asm_gen(&CommandType::And);
@@ -86,8 +85,41 @@ fn generate_hack_asm(config: &Config,
     Ok(generated_hack_asm)
 }
 
-fn generate_push_assembly() -> String {
+// These should never fail so we are safe to just pass back Strings instead of
+// results.
+fn generate_push_assembly(parsed_line: &ParsedLine) -> String {
+    let push_assembly = String::new();
 
+    let memory_segment = match parsed_line.memory_segment {
+        Some(seg) => seg,
+        None => {
+            panic!("There should be a memory segment here if you got this far!")
+        },
+    };
+
+    if memory_segment != MemorySegment::Static {
+        push_assembly.push_str(&format!("@ {} \n", 8));
+    } else {
+        push_assembly.push_str("@0\n");
+    }
+
+    push_assembly.push_str("D=A\n");
+
+    match memory_segment {
+        // I have no idea if the | does what I want it to do, but it looks right
+        MemorySegment::Temp | MemorySegment::Static => {
+            // FIXME: Add generate_memory_segment_label and proper struct for data.
+            push_assembly.push_str();
+            push_assembly.push_str("A=A+D\n");
+            push_assembly.push_str("D=M\n");
+        },
+        MemorySegment::Pointer => {
+
+        },
+        _ => (),
+    }
+
+    push_assembly
 }
 
 fn generate_pop_assembly() -> String {
