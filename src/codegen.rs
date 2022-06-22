@@ -17,16 +17,16 @@ fn generate_hack_asm(config: &Config,
 ) -> Result<String, &'static str> {
     let mut generated_hack_asm = String::new();
 
-    let command_type = match parsed_line.command_type {
+    let command_type = match &parsed_line.command_type {
         Some(str) => str,
-        None => CommandType::Other,
+        None => &CommandType::Other,
     };
 
     match command_type {
         CommandType::Push => {
-            let push_assembly = generate_push_assembly();
+            let push_assembly = generate_push_assembly(todo!());
             generated_hack_asm
-                .push_str(&push_assembly)
+                .push_str(&push_assembly);
         },
         CommandType::Pop => {
             let pop_assembly = generate_pop_assembly();
@@ -88,16 +88,16 @@ fn generate_hack_asm(config: &Config,
 // These should never fail so we are safe to just pass back Strings instead of
 // results.
 fn generate_push_assembly(parsed_line: &ParsedLine) -> String {
-    let push_assembly = String::new();
+    let mut push_assembly = String::new();
 
-    let memory_segment = match parsed_line.memory_segment {
+    let memory_segment = match &parsed_line.memory_segment {
         Some(seg) => seg,
         None => {
             panic!("There should be a memory segment here if you got this far!")
         },
     };
 
-    if memory_segment != MemorySegment::Static {
+    if *memory_segment != MemorySegment::Static {
         push_assembly.push_str(&format!("@ {} \n", 8));
     } else {
         push_assembly.push_str("@0\n");
@@ -109,7 +109,7 @@ fn generate_push_assembly(parsed_line: &ParsedLine) -> String {
         // I have no idea if the | does what I want it to do, but it looks right
         MemorySegment::Temp | MemorySegment::Static => {
             // FIXME: Add generate_memory_segment_label and proper struct for data.
-            push_assembly.push_str();
+            push_assembly.push_str(todo!());
             push_assembly.push_str("A=A+D\n");
             push_assembly.push_str("D=M\n");
         },
@@ -123,9 +123,9 @@ fn generate_push_assembly(parsed_line: &ParsedLine) -> String {
 }
 
 fn generate_pop_assembly() -> String {
-
+    todo!()
 }
 
 fn arithmetic_asm_gen(command_type: &CommandType) -> String {
-
+    todo!()
 }

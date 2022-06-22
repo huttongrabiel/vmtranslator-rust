@@ -37,15 +37,16 @@ pub enum ControlFlow {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct ParsedLine {
+pub struct ParsedLine<'a> {
     pub command_type: Option<CommandType>,
     pub memory_segment: Option<MemorySegment>,
     pub control_flow: Option<ControlFlow>,
+    pub tokens: Vec<&'a str>,
 }
 
-impl ParsedLine {
+impl<'a> ParsedLine<'a> {
     pub fn parse(
-        tokens: Vec<&str>
+        tokens: Vec<&'a str>
     ) -> Result<Self, &'static str> {
         let mut command_type: Option<CommandType> = None;
         let mut memory_segment: Option<MemorySegment> = None;
@@ -88,6 +89,7 @@ impl ParsedLine {
             command_type,
             memory_segment,
             control_flow,
+            tokens,
         })
     }
 }
@@ -104,6 +106,7 @@ mod tests {
             command_type: Some(CommandType::Push),
             memory_segment: Some(MemorySegment::Local),
             control_flow: None,
+            tokens: vec!["push", "local", "8"]
         };
 
         let instruction = vec!["push", "local", "8"];
@@ -121,6 +124,7 @@ mod tests {
             command_type: None,
             memory_segment: None,
             control_flow: Some(ControlFlow::Goto),
+            tokens: vec!["goto", "IF_FALSE"]
         };
 
         let instruction = vec!["goto", "IF_FALSE"];
