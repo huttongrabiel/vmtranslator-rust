@@ -78,6 +78,7 @@ impl<'a> ParsedLine<'a> {
                 "goto"     => control_flow = Some(ControlFlow::Goto),
                 "if-goto"  => control_flow = Some(ControlFlow::IfGoto),
                 "label"    => control_flow = Some(ControlFlow::Label),
+                "function" => control_flow = Some(ControlFlow::Function),
                 "call"     => control_flow = Some(ControlFlow::Call),
                 "return"   => control_flow = Some(ControlFlow::Return),
 

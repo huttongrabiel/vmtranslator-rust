@@ -12,7 +12,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         },
     };
 
-    let translated_content = match vm_translator::translate(config) {
+    let translated_content = match vm_translator::translate(&config) {
         Ok(str) => str,
         Err(e) => {
             eprintln!("Error occured during translation: {}", e);
